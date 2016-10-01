@@ -1,0 +1,4 @@
+This repo is for a basic Python prototype of the forthcoming resample move algorithm for Swift.
+
+A potential problem to study is SLAM, but a simpler variant of this could also work.
+Dataset link: http://cres.usc.edu/radishrepository/view-one.php?name=mit-csail-3rd-floor
