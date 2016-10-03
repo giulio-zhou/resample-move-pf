@@ -39,14 +39,16 @@ class ParticleFilter(object):
 # with Gaussian noise observations 
 # ===============================================
 from scipy.stats import norm
+OBS_STDDEV = 1
+TRANS_STDDEV = 1
 class GaussianLinear(object):
     def gen_obs(num_iter):
         theta = 0.7
         curr_val = 0
-        obs = [np.random.normal(curr_val, 1)]
+        obs = [np.random.normal(curr_val, OBS_STDDEV)]
         for i in range(num_iter):
-            curr_val = np.random.normal(theta * curr_val, 1)
-            obs.append(np.random.normal(curr_val, 1))
+            curr_val = np.random.normal(theta * curr_val, TRANS_STDDEV)
+            obs.append(np.random.normal(curr_val, OBS_STDDEV))
         # return obs
         return np.array(obs)
 
@@ -64,7 +66,7 @@ class GaussianLinear(object):
         deviations and compute the pdf using zero-mean, unit variance Gaussian.
         """
         devs = obs - particles[1]
-        likeli = norm(0, 1).pdf(devs)
+        likeli = norm(0, OBS_STDDEV).pdf(devs)
         likeli /= np.sum(likeli)
         return likeli
 
@@ -85,7 +87,7 @@ class GaussianLinear(object):
         Multiply hidden state by theta, then add Gaussian noise for transition.
         """
         trans_particles = particles[0] * particles[1] + \
-                          np.random.normal(0, 1, particles.shape[1])
+                          np.random.normal(0, TRANS_STDDEV, particles.shape[1])
         return np.vstack((trans_particles, particles[1]))
 
     gen_obs = staticmethod(gen_obs)
