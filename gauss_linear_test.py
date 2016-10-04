@@ -1,5 +1,6 @@
 import numpy as np
 import random
+from collections import Counter
 from scipy.stats import norm
 from particle_filter import ParticleFilter
 
@@ -32,7 +33,7 @@ class GaussianLinear(object):
         Given the particle hypotheses and current observation, calculate the
         deviations and compute the pdf using zero-mean, unit variance Gaussian.
         """
-        devs = obs - particles[1]
+        devs = obs - particles[0]
         likeli = norm(0, OBS_STDDEV).pdf(devs)
         likeli /= np.sum(likeli)
         return likeli
@@ -41,6 +42,10 @@ class GaussianLinear(object):
         """
         For now, compute answer as average of particle hypotheses
         """
+        # counts = Counter(particles[1])
+        # print(len(counts))
+        # if len(counts) < 50:
+        #     print(counts)
         return np.sum(particles[1]) / float(particles.shape[1])
 
     def resample_fn(particles, idx):
@@ -66,7 +71,7 @@ class GaussianLinear(object):
 
 def main():
     num_iter = 1000
-    num_particles = 100000
+    num_particles = 10000
     init_fn, obs_fn = GaussianLinear.init_fn, GaussianLinear.obs_fn
     query_fn, trans_fn = GaussianLinear.query_fn, GaussianLinear.trans_fn
     resample_fn = GaussianLinear.resample_fn
